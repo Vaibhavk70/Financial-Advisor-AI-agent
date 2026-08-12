@@ -1,1 +1,80 @@
-implementation_plan.md
+# ─── Python ───────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+*.egg
+.eggs/
+.mypy_cache/
+.ruff_cache/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.venv/
+venv/
+env/
+ENV/
+
+# ─── Environment & Secrets ────────────────────────────────
+./.env
+.env
+.env.local
+.env.production
+.env.staging
+*.pem
+*.key
+*.cert
+
+# ─── Docker ───────────────────────────────────────────────
+docker-compose.override.yml
+
+# ─── Database ─────────────────────────────────────────────
+*.sqlite
+*.db
+*.sql.gz
+
+# ─── Node / React Frontend ────────────────────────────────
+node_modules/
+.next/
+dist/
+build/
+.eslintcache
+*.tsbuildinfo
+
+# ─── IDEs ─────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ─── Logs ─────────────────────────────────────────────────
+*.log
+logs/
+*.pid
+
+# ─── ML / AI ──────────────────────────────────────────────
+*.gguf
+*.bin
+models/
+checkpoints/
+__pycache__/
+
+# ─── Uploads & Documents ──────────────────────────────────
+services/rag-service/documents/
+uploads/
+
+# ─── Alembic ──────────────────────────────────────────────
+# Keep migrations, but ignore auto-generated temp files
+
+# ─── OS ───────────────────────────────────────────────────
+.DS_Store
+desktop.ini

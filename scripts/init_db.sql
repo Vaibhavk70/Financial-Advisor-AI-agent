@@ -1,0 +1,16 @@
+-- ════════════════════════════════════════════════════════
+--   AI Financial Advisor — PostgreSQL Initialization
+--   Runs automatically when PostgreSQL starts for first time
+-- ════════════════════════════════════════════════════════
+
+-- Enable UUID extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- Enable pg_trgm for full-text search
+CREATE EXTENSION IF NOT EXISTS "pg_trgm";
+
+-- Log initialization
+DO $$
+BEGIN
+  RAISE NOTICE 'AI Financial Advisor DB initialized successfully';
+END $$;
