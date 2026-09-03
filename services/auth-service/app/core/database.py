@@ -11,13 +11,28 @@ from sqlalchemy.orm import DeclarativeBase
 from app.core.config import settings
 
 # ─── 1. Async Engine ──────────────────────────────────────────────────
+engine_kwargs = {
+    "echo": settings.DEBUG,
+}
+
+if "sqlite" in settings.DATABASE_URL:
+    from sqlalchemy.pool import StaticPool
+
+    engine_kwargs.update({
+        "connect_args": {"check_same_thread": False},
+        "poolclass": StaticPool,
+    })
+else:
+    engine_kwargs.update({
+        "pool_pre_ping": True,       # Test connection health before reusing from pool
+        "pool_size": 10,             # Maintain up to 10 persistent DB connections
+        "max_overflow": 20,          # Allow up to 20 temporary extra connections under load
+        "pool_recycle": 3600,        # Recycle connections every hour to prevent stale sockets
+    })
+
 engine = create_async_engine(
     settings.DATABASE_URL,
-    echo=settings.DEBUG,
-    pool_pre_ping=True,       # Test connection health before reusing from pool
-    pool_size=10,             # Maintain up to 10 persistent DB connections
-    max_overflow=20,          # Allow up to 20 temporary extra connections under load
-    pool_recycle=3600,        # Recycle connections every hour to prevent stale sockets
+    **engine_kwargs,
 )
 
 # ─── 2. Session Factory ───────────────────────────────────────────────

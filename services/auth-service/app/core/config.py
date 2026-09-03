@@ -1,5 +1,8 @@
 """Application configuration using Pydantic Settings."""
 from functools import lru_cache
+from typing import Union
+import json
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -62,10 +65,22 @@ class Settings(BaseSettings):
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
     # ─── CORS ────────────────────────────────────────────────
-    ALLOWED_ORIGINS: list[str] = [
+    ALLOWED_ORIGINS: Union[list[str], str] = [
         "http://localhost:3000",
         "http://localhost:5173",
     ]
+
+    @field_validator("ALLOWED_ORIGINS")
+    @classmethod
+    def parse_allowed_origins(cls, v: Union[list[str], str]) -> list[str]:
+        if isinstance(v, str):
+            if v.startswith("[") and v.endswith("]"):
+                try:
+                    return json.loads(v)
+                except json.JSONDecodeError:
+                    pass
+            return [x.strip() for x in v.split(",") if x.strip()]
+        return v
 
 
 @lru_cache
