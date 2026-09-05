@@ -13,15 +13,30 @@ from app.routes.auth import router as auth_router
 from app.routes.users import router as users_router
 
 # ─── 1. Structured Logging Configuration ────────────────────────────
+from structlog.processors import CallsiteParameter, CallsiteParameterAdder
+
+def add_service_context(logger, method_name, event_dict):
+    event_dict["service"] = "auth-service"
+    return event_dict
+
 structlog.configure(
     processors=[
         structlog.contextvars.merge_contextvars,
+        add_service_context,
         structlog.processors.add_log_level,
         structlog.processors.TimeStamper(fmt="iso"),
+        CallsiteParameterAdder(
+            [
+                CallsiteParameter.FILENAME,
+                CallsiteParameter.LINENO,
+                CallsiteParameter.FUNC_NAME,
+            ]
+        ),
         structlog.dev.ConsoleRenderer() if settings.DEBUG else structlog.processors.JSONRenderer(),
     ]
 )
 logger = structlog.get_logger(__name__)
+
 
 
 # ─── 2. Lifespan Event Manager (Startup / Shutdown) ───────────────────
