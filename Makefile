@@ -68,3 +68,8 @@ setup: ## First-time setup: create .env, start containers, run DB migrations
 clean: ## Remove containers, volumes, and temporary files
 	docker compose down -v --remove-orphans
 	docker system prune -f
+
+# ─── Ollama ─────────────────────────────────────────────
+pull-models: ## Pull required Ollama AI models into Docker container
+	docker exec -it financeai-ollama ollama pull llama3.2:3b
+	@echo "✅ Models ready!"
